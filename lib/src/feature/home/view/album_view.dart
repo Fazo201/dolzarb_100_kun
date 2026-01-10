@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-
 const bool admin = true;
 
 class AlbumView extends StatelessWidget {
@@ -142,56 +141,58 @@ class AlbumView extends StatelessWidget {
                   const SizedBox(height: 14),
 
                   GridView.builder(
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  itemCount: _items.length,
-  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 5,
-    childAspectRatio: 1.6,
-  ),
-  itemBuilder: (context, i) {
-    final it = _items[i];
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _items.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          childAspectRatio: 1.6,
+                        ),
+                    itemBuilder: (context, i) {
+                      final it = _items[i];
 
-    return GestureDetector(
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          barrierDismissible: true,
-          barrierLabel: '',
-          transitionDuration: const Duration(milliseconds: 250),
-          pageBuilder: (_, __, ___) {
-            return _FullScreenDialog(item: it);
-          },
-          transitionBuilder: (_, anim, __, child) {
-            return FadeTransition(
-              opacity: anim,
-              child: child,
-            );
-          },
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12),
-        child: Column(
-          children: [
-            Image.asset(it.imageUrl, height: 112.h),
-            const SizedBox(height: 4),
-            Text(
-              it.label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18.sp,
-                color: const Color(0xFF013A92),
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  },
-)
-                
+                      return GestureDetector(
+                        onTap: () {
+                          showGeneralDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            barrierLabel: '',
+                            transitionDuration: const Duration(
+                              milliseconds: 250,
+                            ),
+                            pageBuilder: (_, __, ___) {
+                              return _FullScreenDialog(item: it);
+                            },
+                            transitionBuilder: (_, anim, __, child) {
+                              return FadeTransition(
+                                opacity: anim,
+                                child: child,
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Column(
+                            children: [
+                              Image.asset(it.imageUrl, height: 112.h),
+                              const SizedBox(height: 4),
+                              Text(
+                                it.label,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  color: const Color(0xFF013A92),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -201,8 +202,6 @@ class AlbumView extends StatelessWidget {
     );
   }
 }
-
-
 
 class _FullScreenDialog extends StatefulWidget {
   final _Item item;
@@ -270,9 +269,7 @@ class _FullScreenDialogState extends State<_FullScreenDialog> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   final data = snapshot.data?.data();
@@ -282,74 +279,83 @@ class _FullScreenDialogState extends State<_FullScreenDialog> {
                     _controller.text = description;
                   }
 
-                  return Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: _editing
-                        ? Column(
-                            children: [
-                              Expanded(
-                                child: TextField(
-  controller: _controller,
-  maxLines: null,
-  expands: true,
-  textAlignVertical: TextAlignVertical.top, // 🔹 hintText va matn yuqoridan boshlansin
-  decoration: const InputDecoration(
-    border: OutlineInputBorder(),
-    hintText: 'Маълумотни киритинг',
-    alignLabelWithHint: true, // 🔹 hintText yuqoriga tekislanadi
-    contentPadding: EdgeInsets.all(12), // 🔹 padding qo‘shish
-  ),
-),
-
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      setState(() => _editing = false);
-                                    },
-                                    child: const Text('Бекор қилиш'),
+                  return Container(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 46.0,
+                        vertical: 12,
+                      ),
+                      child: _editing
+                          ? Column(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _controller,
+                                    maxLines: null,
+                                    expands: true,
+                                    textAlignVertical: TextAlignVertical.top, 
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: 'Маълумотни киритинг',
+                                      alignLabelWithHint: true,
+                                      contentPadding: EdgeInsets.all(
+                                        12,
+                                      ),
+                                    ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  ElevatedButton.icon(
-                                    icon: const Icon(Icons.save),
-                                    label: const Text('Сақлаш'),
-                                    onPressed: () async {
-                                      await FirebaseFirestore.instance
-                                          .collection('items')
-                                          .doc(widget.item.id)
-                                          .set(
-                                        {
-                                          'description': _controller.text.trim(),
-                                          'updatedAt': FieldValue.serverTimestamp(),
-                                        },
-                                        SetOptions(merge: true),
-                                      );
-                                      setState(() => _editing = false);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text('Saqlandi'),
-                                      ));
-                                    },
-                                  ),
-                                ],
-                              )
-                            ],
-                          )
-                        : SingleChildScrollView(
-                            child: Text(
-                              description.isEmpty
-                                  ? "Ma'lumot mavjud emas"
-                                  : description,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                height: 1.6,
-                                color: Color(0xFF06005A),
+                                ),
+                                const SizedBox(height: 12),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() => _editing = false);
+                                      },
+                                      child: const Text('Бекор қилиш'),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    ElevatedButton.icon(
+                                      icon: const Icon(Icons.save),
+                                      label: const Text('Сақлаш'),
+                                      onPressed: () async {
+                                        await FirebaseFirestore.instance
+                                            .collection('items')
+                                            .doc(widget.item.id)
+                                            .set({
+                                              'description': _controller.text
+                                                  .trim(),
+                                              'updatedAt':
+                                                  FieldValue.serverTimestamp(),
+                                            }, SetOptions(merge: true));
+                                        setState(() => _editing = false);
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Saqlandi'),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : SingleChildScrollView(
+                              child: Text(
+                                description.isEmpty
+                                    ? "Ma'lumot mavjud emas"
+                                    : description,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  height: 1.6,
+                                  color: Color(0xFF06005A),
+                                ),
                               ),
                             ),
-                          ),
+                    ),
                   );
                 },
               ),
@@ -361,21 +367,13 @@ class _FullScreenDialogState extends State<_FullScreenDialog> {
   }
 }
 
-
-
-
 class _Item {
-  final String id;          // firestore document id
-  final String imageUrl;    // LOCAL asset
-  final String label;       // LOCAL text
+  final String id; // firestore document id
+  final String imageUrl; // LOCAL asset
+  final String label; // LOCAL text
 
-  const _Item({
-    required this.id,
-    required this.imageUrl,
-    required this.label,
-  });
+  const _Item({required this.id, required this.imageUrl, required this.label});
 }
-
 
 final List<_Item> _items = [
   _Item(
