@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "966773388468",
+    "project_id": "dolzarb100-f50a5",
+    "storage_bucket": "dolzarb100-f50a5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966773388468:android:c1b6e1ecabd9784faf53e1",
+        "android_client_info": {
+          "package_name": "com.example.dolzarb_100_kun"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2a2pRxNKvty88Tw9rGlzlJQF3J-Gnzdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

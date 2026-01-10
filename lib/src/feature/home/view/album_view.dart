@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dolzarb_100_kun/src/feature/home/widgets/calendar_count_down.dart';
 import 'package:dolzarb_100_kun/src/feature/home/widgets/center_thick_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+
+
+const bool admin = true;
 
 class AlbumView extends StatelessWidget {
   const AlbumView({super.key});
@@ -150,8 +154,6 @@ class AlbumView extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        if (it.description == null) return;
-
         showGeneralDialog(
           context: context,
           barrierDismissible: true,
@@ -200,158 +202,156 @@ class AlbumView extends StatelessWidget {
   }
 }
 
-class _Item {
-  final String imageUrl;
-  final String label;
-  final String? description;
-  _Item(this.imageUrl, this.label, [this.description]);
-}
-
-List<_Item> _items = [
-  _Item(
-    'assets/images/1.png',
-    'Стратегик фаолият билан операцион бошқарувни бир-биридан ажратиш',
-    """****** бўйича: 
-
-Лойиҳалар рўйхати шакллантирилди; 
-
-Лойиҳанинг техник топшириғи дастлабки версияси ишлаб чиқилди 
-
-Лойиҳа ижрочилари рўйхати шакллантирилди. 
-
-****** бўйича: 
-
-Лойиҳалар рўйхати шакллантирилди; 
-
-Лойиҳанинг техник топшириғи дастлабки версияси ишлаб чиқилди 
-
-Лойиҳа ижрочилари рўйхати шакллантирилди. 
-****** бўйича: 
-
-Лойиҳалар рўйхати шакллантирилди; 
-
-Лойиҳанинг техник топшириғи дастлабки версияси ишлаб чиқилди 
-
-Лойиҳа ижрочилари рўйхати шакллантирилди. 
-
-****** бўйича: 
-
-Лойиҳалар рўйхати шакллантирилди; 
-
-Лойиҳанинг техник топшириғи дастлабки версияси ишлаб чиқилди 
-
-Лойиҳа ижрочилари рўйхати шакллантирилди. """,
-  ),
-  _Item(
-    'assets/images/2.png', 
-    'Стратегия офисини ташкил этиш',
-    'Стратегия офисини ташкил этиш',
-  ),
-  _Item(
-    'assets/images/3.png',
-    'Геологик-қидирув ишлари харажатларини мақбуллаштириш',
-    'Геологик-қидирув ишлари харажатларини мақбуллаштириш',
-  ),
-  _Item(
-    'assets/images/4.png', 
-    'Газни чуқур қайта ишлаш',
-    'Газни чуқур қайта ишлаш',
-  ),
-  _Item(
-    'assets/images/5.png', 
-    'Кредит юкламасини кескин камайтириш',
-    'Кредит юкламасини кескин камайтириш',
-  ),
-  _Item(
-    'assets/images/6.png', 
-    'Молиявий шаффофликни тўлиқ таъминлаш',
-    'Молиявий шаффофликни тўлиқ таъминлаш',
-  ),
-  _Item(
-    'assets/images/7.png',
-    'Кадрлар сиёсати ва самарадорликнинг муҳим кўрсаткичлари',
-    'Кадрлар сиёсати ва самарадорликнинг муҳим кўрсаткичлари',
-  ),
-  _Item(
-    'assets/images/8.png',
-    'Инвестиция сиёсатида самарадорликнинг устуворлиги',
-    'Инвестиция сиёсатида самарадорликнинг устуворлиги',
-  ),
-  _Item(
-    'assets/images/9.png',
-    'Рақамлаштириш ва сунъий интеллектдан фойдаланиш',
-    'Рақамлаштириш ва сунъий интеллектдан фойдаланиш',
-  ),
-  _Item(
-    'assets/images/10.png', 
-    'Қазиб чиқаришда янги ёндашув',
-    'Қазиб чиқаришда янги ёндашув',
-  ),
-];
 
 
-class _FullScreenDialog extends StatelessWidget {
+class _FullScreenDialog extends StatefulWidget {
   final _Item item;
   const _FullScreenDialog({required this.item});
 
   @override
+  State<_FullScreenDialog> createState() => _FullScreenDialogState();
+}
+
+class _FullScreenDialogState extends State<_FullScreenDialog> {
+  final TextEditingController _controller = TextEditingController();
+  bool _editing = false;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
+      floatingActionButton: admin
+          ? FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  _editing = true;
+                });
+              },
+              child: const Icon(Icons.edit),
+            )
+          : null,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // HEADER
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 16,
-              ),
+              padding: const EdgeInsets.all(24),
               child: Row(
                 children: [
-                  if (item.imageUrl.isNotEmpty)
-                      Center(
-                        child: Image.asset(
-                          item.imageUrl,
-                          height: 60,
-                        ),
-                      ),
-                  SizedBox(width: 12),
+                  Image.asset(widget.item.imageUrl, height: 60),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      item.label,
+                      widget.item.label,
                       style: const TextStyle(
-                        color: Color.fromARGB(255, 0, 92, 221),
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
+                        color: Color(0xFF003177),
                       ),
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: Colors.black),
+                    icon: const Icon(Icons.close),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
             ),
 
-            Divider(color: Color(0xFF003177), height: 1),
+            const Divider(),
 
-           
+            // REAL-TIME DESCRIPTION
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 48,
-                  vertical: 24,
-                ),
-                child: Text(
-                      item.description??"",
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 6, 0, 90),
-                        fontSize: 16,
-                        height: 1.6, 
-                      ),
-                    ),
+              child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                stream: FirebaseFirestore.instance
+                    .collection('items')
+                    .doc(widget.item.id)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  final data = snapshot.data?.data();
+                  final description = data?['description'] ?? '';
+
+                  if (_editing) {
+                    _controller.text = description;
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: _editing
+                        ? Column(
+                            children: [
+                              Expanded(
+                                child: TextField(
+  controller: _controller,
+  maxLines: null,
+  expands: true,
+  textAlignVertical: TextAlignVertical.top, // 🔹 hintText va matn yuqoridan boshlansin
+  decoration: const InputDecoration(
+    border: OutlineInputBorder(),
+    hintText: 'Маълумотни киритинг',
+    alignLabelWithHint: true, // 🔹 hintText yuqoriga tekislanadi
+    contentPadding: EdgeInsets.all(12), // 🔹 padding qo‘shish
+  ),
+),
+
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() => _editing = false);
+                                    },
+                                    child: const Text('Бекор қилиш'),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  ElevatedButton.icon(
+                                    icon: const Icon(Icons.save),
+                                    label: const Text('Сақлаш'),
+                                    onPressed: () async {
+                                      await FirebaseFirestore.instance
+                                          .collection('items')
+                                          .doc(widget.item.id)
+                                          .set(
+                                        {
+                                          'description': _controller.text.trim(),
+                                          'updatedAt': FieldValue.serverTimestamp(),
+                                        },
+                                        SetOptions(merge: true),
+                                      );
+                                      setState(() => _editing = false);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('Saqlandi'),
+                                      ));
+                                    },
+                                  ),
+                                ],
+                              )
+                            ],
+                          )
+                        : SingleChildScrollView(
+                            child: Text(
+                              description.isEmpty
+                                  ? "Ma'lumot mavjud emas"
+                                  : description,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                height: 1.6,
+                                color: Color(0xFF06005A),
+                              ),
+                            ),
+                          ),
+                  );
+                },
               ),
             ),
           ],
@@ -360,3 +360,72 @@ class _FullScreenDialog extends StatelessWidget {
     );
   }
 }
+
+
+
+
+class _Item {
+  final String id;          // firestore document id
+  final String imageUrl;    // LOCAL asset
+  final String label;       // LOCAL text
+
+  const _Item({
+    required this.id,
+    required this.imageUrl,
+    required this.label,
+  });
+}
+
+
+final List<_Item> _items = [
+  _Item(
+    id: '1',
+    imageUrl: 'assets/images/1.png',
+    label: 'Стратегик фаолият билан операцион бошқарувни бир-биридан ажратиш',
+  ),
+  _Item(
+    id: '2',
+    imageUrl: 'assets/images/2.png',
+    label: 'Стратегия офисини ташкил этиш',
+  ),
+  _Item(
+    id: '3',
+    imageUrl: 'assets/images/3.png',
+    label: 'Геологик-қидирув ишлари харажатларини мақбуллаштириш',
+  ),
+  _Item(
+    id: '4',
+    imageUrl: 'assets/images/4.png',
+    label: 'Газни чуқур қайта ишлаш',
+  ),
+  _Item(
+    id: '5',
+    imageUrl: 'assets/images/5.png',
+    label: 'Кредит юкламасини кескин камайтириш',
+  ),
+  _Item(
+    id: '6',
+    imageUrl: 'assets/images/6.png',
+    label: 'Молиявий шаффофликни тўлиқ таъминлаш',
+  ),
+  _Item(
+    id: '7',
+    imageUrl: 'assets/images/7.png',
+    label: 'Кадрлар сиёсати ва самарадорликнинг муҳим кўрсаткичлари',
+  ),
+  _Item(
+    id: '8',
+    imageUrl: 'assets/images/8.png',
+    label: 'Инвестиция сиёсатида самарадорликнинг устуворлиги',
+  ),
+  _Item(
+    id: '9',
+    imageUrl: 'assets/images/9.png',
+    label: 'Рақамлаштириш ва сунъий интеллектдан фойдаланиш',
+  ),
+  _Item(
+    id: '10',
+    imageUrl: 'assets/images/10.png',
+    label: 'Қазиб чиқаришда янги ёндашув',
+  ),
+];
