@@ -6,21 +6,31 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
+  
+  // // Для WINDOWS **************************************************************************************************
+
+  // await windowManager.ensureInitialized();
+  // WindowOptions windowOptions = const WindowOptions(
+  //   size: Size(1280, 720),
+  //   center: true,
+  //   backgroundColor: Colors.transparent,
+  //   titleBarStyle: TitleBarStyle.hidden,
+  // );
+  // windowManager.waitUntilReadyToShow(windowOptions, () async {
+  //   await windowManager.show();
+  //   await windowManager.focus();
+  // });
+
+  // // **************************************************************************************************************
+
+
+  // Для ANDROID **************************************************************************************************
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  WindowOptions windowOptions = const WindowOptions(
-    size: Size(1280, 720),
-    center: true,
-    backgroundColor: Colors.transparent,
-    titleBarStyle: TitleBarStyle.hidden,
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-  });
+  // **************************************************************************************************************
+  
   runApp(const App());
 }

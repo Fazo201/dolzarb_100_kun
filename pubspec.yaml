@@ -41,6 +41,8 @@ dependencies:
   window_manager: ^0.5.1
   firebase_core: ^4.3.0
   cloud_firestore: ^6.1.1
+  path: ^1.9.1
+  open_filex: ^4.7.0
 
 dev_dependencies:
   flutter_test:

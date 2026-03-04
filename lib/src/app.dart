@@ -1,4 +1,5 @@
-import 'package:dolzarb_100_kun/src/feature/home/view/album_view.dart';
+import 'package:dolzarb_100_kun/src/feature/home/view/firebase_desktop_view.dart';
+import 'package:dolzarb_100_kun/src/feature/home/view/windows_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,7 +17,9 @@ class App extends StatelessWidget {
       home: child,
     );
   },
-  child: const AlbumView(),
+  child: const FirebaseDesktopView(),
+  // child: const WindowsView(),
+  // child: const DraftView(),
 );
   }
 }

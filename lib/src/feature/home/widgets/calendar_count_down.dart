@@ -99,7 +99,7 @@ class _CalendarCountdownState extends State<CalendarCountdown> {
       return StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: const Text('Кунлар сонини киритинг'),
+            title: const Text('Kunlar soni va parolni kiriting'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -107,8 +107,8 @@ class _CalendarCountdownState extends State<CalendarCountdown> {
                   controller: dayController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    labelText: 'Кунлар сони',
-                    hintText: 'масалан: 100',
+                    labelText: 'Kunlar soni',
+                    hintText: 'Masalan: 100',
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -116,7 +116,7 @@ class _CalendarCountdownState extends State<CalendarCountdown> {
                   controller: passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: 'Парол',
+                    labelText: 'Parol',
                     errorText: errorText,
                   ),
                 ),
@@ -125,7 +125,7 @@ class _CalendarCountdownState extends State<CalendarCountdown> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Бекор қилиш'),
+                child: const Text('Orqaga'),
               ),
               TextButton(
                 onPressed: () {
@@ -134,21 +134,21 @@ class _CalendarCountdownState extends State<CalendarCountdown> {
 
                   if (password != 'dolzarb100') {
                     setState(() {
-                      errorText = 'Парол нотўғри';
+                      errorText = 'Parol noto‘g‘ri';
                     });
                     return;
                   }
 
                   if (days == null || days <= 0) {
                     setState(() {
-                      errorText = 'Кунлар сони нотўғри';
+                      errorText = 'Kunlar soni noto‘g‘ri';
                     });
                     return;
                   }
 
                   Navigator.pop(context, days);
                 },
-                child: const Text('Сақлаш'),
+                child: const Text('Saqlash'),
               ),
             ],
           );
@@ -174,7 +174,7 @@ child: Column(
             ),
           ),
           Text(
-            ' КУН ҚОЛДИ',
+            ' KUN QOLDI',
             style: TextStyle(
               fontSize: 28.h,
               fontWeight: FontWeight.bold,
